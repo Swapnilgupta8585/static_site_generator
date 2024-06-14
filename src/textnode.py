@@ -1,3 +1,5 @@
+from htmlnode import LeafNode
+
 class TextNode:
     def __init__(self,text,text_type,url=None):
         self.text = text
@@ -10,5 +12,20 @@ class TextNode:
     def __repr__(self):
         return f"TextNode({self.text}, {self.text_type}, {self.url})"
         
+    def text_node_to_html(text_node):
+        if text_node.text_type == "text":
+            return LeafNode(None,"swapnil gupta")
+        elif text_node.text_type == "bold":
+            return LeafNode("b","sappo")
+        elif text_node.text_type == "italic":
+            return LeafNode("i","anime")
+        elif text_node.text_type == "code":
+            return LeafNode("code","boot.dev")
+        elif text_node.text_type == "link":
+            return LeafNode("a","my image",{"href": "www.boot.dev.com"})
+        elif text_node.text_type == "image":
+            return LeafNode("img","",{"src": "image.png", "alt":"my image"})
+        else:
+            raise ValueError(f"Invalid Text Type: {text_node.text_type}")    
 
 
