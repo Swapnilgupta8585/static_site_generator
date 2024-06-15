@@ -1,6 +1,7 @@
 import unittest
 from textnode import TextNode
-from inline_markdown import split_nodes_delimiter
+from inline_markdown import split_nodes_delimiter,extract_markdown_links,extract_markdown_images
+
 
 class Test_inline_markdown(unittest.TestCase):
     def test_delim_bold(self):
@@ -103,7 +104,17 @@ class Test_inline_markdown(unittest.TestCase):
         self.assertListEqual(actual_nodes, expected_nodes)
 
    
-    
+
+    def test_extract_markdown_images(self):
+        text = "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and ![another](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png)"
+        list_tuples = extract_markdown_images(text)
+        self.assertListEqual(list_tuples,[("image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"), ("another", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png")])
+
+    def test_extract_markdown_links(self):
+        text = "This is text with a [link](https://www.example.com) and [another](https://www.example.com/another)"
+        list_tuples = extract_markdown_links(text)
+        self.assertListEqual(list_tuples,[("link", "https://www.example.com"), ("another", "https://www.example.com/another")])
+
 
 
 if __name__ == "__main__":
