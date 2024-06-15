@@ -12,13 +12,13 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             if len(split_wrt_delimiter) % 2 == 0:
                 raise ValueError("Invalid markdown, formatted section not closed")
             
-            for word in split_wrt_delimiter:
-                if word == "":
+            for i in range(0,len(split_wrt_delimiter)):
+                if split_wrt_delimiter[i] == "":
                     continue
-                elif word[0] == " " or word[-1] == " ":
-                    split_node.append(TextNode(word,"text"))
+                if i % 2 == 0:
+                    split_node.append(TextNode(split_wrt_delimiter[i],"text"))
                     continue
-                split_node.append(TextNode(word,text_type))
+                split_node.append(TextNode(split_wrt_delimiter[i],text_type))
             new_nodes.extend(split_node)
         return new_nodes
 
