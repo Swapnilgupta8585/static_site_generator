@@ -4,7 +4,8 @@ from inline_markdown import (split_nodes_delimiter,
                              extract_markdown_links,
                              extract_markdown_images,
                              split_nodes_images,
-                             split_nodes_links
+                             split_nodes_links,
+                             text_to_textnodes
                             )
 
 
@@ -233,6 +234,53 @@ class Test_inline_markdown(unittest.TestCase):
         
 
    
+
+
+
+
+
+    def test_text_to_textnode(self):
+        text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
+        self.assertListEqual(
+             [
+                TextNode("This is ", "text"),
+                TextNode("text", "bold"),
+                TextNode(" with an ", "text"),
+                TextNode("italic", "italic"),
+                TextNode(" word and a ", "text"),
+                TextNode("code block", "code"),
+                TextNode(" and an ", "text"),
+                TextNode("image", "image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+                TextNode(" and a ", "text"),
+                TextNode("link", "link", "https://boot.dev"),
+            ],text_to_textnodes(text)
+        )
+
+    def test_text_to_textnode(self):
+        text = "This `code code` is [link](https://boot.dev) **text****another_text** with an *italic* word *italy* and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev) ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png)"
+        self.assertListEqual(
+             [
+                TextNode("This ", "text"),
+                TextNode("code code", "code"),
+                TextNode(" is ", "text"),
+                TextNode("link", "link", "https://boot.dev"),
+                TextNode(" ", "text"),
+                TextNode("text", "bold"),
+                TextNode("another_text", "bold"),
+                TextNode(" with an ", "text"),
+                TextNode("italic", "italic"),
+                TextNode(" word ", "text"),
+                TextNode("italy", "italic"),
+                TextNode(" and a ", "text"),
+                TextNode("code block", "code"),
+                TextNode(" and an ", "text"),
+                TextNode("image", "image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+                TextNode(" and a ", "text"),
+                TextNode("link", "link", "https://boot.dev"),
+                TextNode(" ", "text"),
+                TextNode("image", "image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+            ],text_to_textnodes(text)
+        )
 
 
 if __name__ == "__main__":
