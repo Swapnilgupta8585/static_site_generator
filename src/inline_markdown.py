@@ -25,7 +25,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
         
 
-
 def extract_markdown_images(text):
     alt_txt_and_url = re.findall(r"!\[(.*?)\]\((.*?)\)",text)
     return alt_txt_and_url
@@ -33,6 +32,56 @@ def extract_markdown_images(text):
 def extract_markdown_links(text):
     anchor_txt_and_url = re.findall(r"\[(.*?)\]\((.*?)\)",text)
     return anchor_txt_and_url
+
+
+def split_nodes_images(old_nodes):
+    new_node  = []
+    for node in old_nodes:
+        split_node = []
+        image_tuples = extract_markdown_images(node.text)
+
+        if len(image_tuples) == 0:
+            split_node.append(node)
+            new_node.extend(split_node)
+            continue
+        node_text = node.text
+        for image_tup in image_tuples:
+            split_wrt_images = node_text.split(f"![{image_tup[0]}]({image_tup[1]})",1)
+           
+            if split_wrt_images[0] != "":
+                split_node.append(TextNode(split_wrt_images[0],"text"))
+            split_node.append(TextNode(image_tup[0],"image",image_tup[1]))
+            node_text = split_wrt_images[1]
+        new_node.extend(split_node)
+    
+    return new_node
+
+
+def split_nodes_links(old_nodes):
+    new_node  = []
+    for node in old_nodes:
+        split_node = []
+        link_tuples = extract_markdown_links(node.text)
+        
+        if len(link_tuples) == 0:
+            split_node.append(node)
+            new_node.extend(split_node)
+            continue
+        node_text = node.text
+        for link_tup in link_tuples:
+            split_wrt_links = node_text.split(f"[{link_tup[0]}]({link_tup[1]})",1)
+            
+            if split_wrt_links[0] != "":
+                split_node.append(TextNode(split_wrt_links[0],"text"))
+            split_node.append(TextNode(link_tup[0],"link",link_tup[1]))
+            node_text = split_wrt_links[1]
+        new_node.extend(split_node)
+   
+    return new_node
+
+
+
+
 
 
 
