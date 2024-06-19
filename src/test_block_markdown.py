@@ -1,5 +1,4 @@
 import unittest
-
 from block_markdown import (
     markdown_to_blocks,
     block_to_block_type,
@@ -55,12 +54,6 @@ This is the same paragraph on a new line
             ],
         )
 
-
-
-
-
-
-
     def test_block_to_block_type(self):
         md = """
 This is **bolded** paragraph
@@ -97,11 +90,6 @@ This is the same paragraph on a new line
         self.assertEqual(block_to_block_type(block), block_type_ordered_list)
         block = "paragraph"
         self.assertEqual(block_to_block_type(block), block_type_paragraph)
-
-        
-
-    
-
 
 if __name__ == "__main__":
     unittest.main()

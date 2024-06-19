@@ -1,7 +1,5 @@
 import unittest
-
 from htmlnode import HtmlNode,LeafNode,ParentNode
-
 
 class TestHtmlNode(unittest.TestCase):
     def test_of_props_to_html(self):
@@ -14,7 +12,6 @@ class TestHtmlNode(unittest.TestCase):
         test_string= ' href="WWE.COM" target="WWE" color="BLUE"'
         self.assertEqual(node.props_to_html(),test_string)
 
-   
     def test_of_LeafNode(self):
         node = LeafNode("p",
             "sappoBhai jindabaad",
@@ -122,9 +119,5 @@ class TestHtmlNode(unittest.TestCase):
     #         "<h2><b>Bold text</b>Normal text<i>italic text</i>Normal text</h2>",
     #     )
 
-
-
-
-        
 if __name__ == "__main__":
     unittest.main()

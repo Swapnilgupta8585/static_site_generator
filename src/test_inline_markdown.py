@@ -8,7 +8,6 @@ from inline_markdown import (split_nodes_delimiter,
                              text_to_textnodes
                             )
 
-
 class Test_inline_markdown(unittest.TestCase):
     def test_delim_bold(self):
             node = TextNode("This is text with a **bolded** word", "text")
@@ -71,8 +70,7 @@ class Test_inline_markdown(unittest.TestCase):
             ],
             new_nodes,
         )
-    
-    
+       
     def test_split_nodes_delimiter_adjacent_delim_text(self):
         """
         Test splitting a TextNode into multiple TextNodes by a delimiter,
@@ -109,8 +107,6 @@ class Test_inline_markdown(unittest.TestCase):
         # Assert
         self.assertListEqual(actual_nodes, expected_nodes)
 
-   
-
     def test_extract_markdown_images(self):
         text = "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and ![another](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png)"
         list_tuples = extract_markdown_images(text)
@@ -139,10 +135,6 @@ class Test_inline_markdown(unittest.TestCase):
             matches,
         )
 
-
-
-    
-    
     def test_split_nodes_images(self):
         node = TextNode(
                     "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
@@ -172,7 +164,6 @@ class Test_inline_markdown(unittest.TestCase):
                                     "second link", "link", "https://www.example.com/another"
                                 ),
                             ],split_nodes) 
-
 
     def test_split_nodes_images_empty_content(self):
             node = TextNode(
@@ -204,8 +195,6 @@ class Test_inline_markdown(unittest.TestCase):
                                 ),
                             ],split_nodes) 
         
-
-
     def test_split_nodes_images_no_image(self):
             node = TextNode(
                         " no images this time sorry! ",
@@ -231,13 +220,6 @@ class Test_inline_markdown(unittest.TestCase):
                                 TextNode(" no links this time sorry! ", "text"),
                                 
                             ],split_nodes) 
-        
-
-   
-
-
-
-
 
     def test_text_to_textnode(self):
         text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
@@ -281,7 +263,6 @@ class Test_inline_markdown(unittest.TestCase):
                 TextNode("image", "image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
             ],text_to_textnodes(text)
         )
-
 
 if __name__ == "__main__":
       unittest.main()

@@ -1,7 +1,6 @@
 from textnode import TextNode
 import re
 
-
 def text_to_textnodes(text):
     original_node = TextNode(text,'text')
     
@@ -16,10 +15,6 @@ def text_to_textnodes(text):
     split_for_links = split_nodes_links(split_for_images)
     
     return split_for_links
-
-
-
-
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
         new_nodes = []
@@ -42,17 +37,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 split_node.append(TextNode(split_wrt_delimiter[i],text_type))
             new_nodes.extend(split_node)
         return new_nodes
-
-        
-
-def extract_markdown_images(text):
-    alt_txt_and_url = re.findall(r"!\[(.*?)\]\((.*?)\)",text)
-    return alt_txt_and_url
-
-def extract_markdown_links(text):
-    anchor_txt_and_url = re.findall(r"\[(.*?)\]\((.*?)\)",text)
-    return anchor_txt_and_url
-
 
 def split_nodes_images(old_nodes):
     new_node  = []
@@ -78,7 +62,6 @@ def split_nodes_images(old_nodes):
         
     
     return new_node
-
 
 def split_nodes_links(old_nodes):
     new_node  = []
@@ -109,6 +92,14 @@ def split_nodes_links(old_nodes):
         
    
     return new_node
+
+def extract_markdown_images(text):
+    alt_txt_and_url = re.findall(r"!\[(.*?)\]\((.*?)\)",text)
+    return alt_txt_and_url
+
+def extract_markdown_links(text):
+    anchor_txt_and_url = re.findall(r"\[(.*?)\]\((.*?)\)",text)
+    return anchor_txt_and_url
 
 
 

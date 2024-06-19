@@ -1,4 +1,6 @@
-from htmlnode import HtmlNode
+from htmlnode import ParentNode
+from textnode import text_node_to_html_node
+from inline_markdown import text_to_textnodes
 
 block_type_paragraph = "paragraph"
 block_type_heading = "heading"
@@ -7,6 +9,13 @@ block_type_quote = "quote"
 block_type_unordered_list = "unordered_list"
 block_type_ordered_list = "ordered_list"
 
+def markdown_to_html_node(markdown):
+    children = []
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        html_node = get_html_node(block)
+        children.append(html_node)
+    return ParentNode("div",children)
 
 def markdown_to_blocks(raw_markdown):
     if raw_markdown == "":
@@ -21,9 +30,31 @@ def markdown_to_blocks(raw_markdown):
 
     return list_blocks
 
-
+def get_html_node(block):
+    block_type = block_to_block_type(block) 
+    if block_type == block_type_heading:
+        heading_html_node = heading_block_to_htmlnode(block)
+        return heading_html_node
+    if block_type == block_type_quote:
+        quote_html_node = quote_block_to_htmlnode(block)
+        return quote_html_node
+    if block_type == block_type_code:
+        code_html_node = code_block_to_htmlnode(block)
+        return code_html_node
+    if block_type == block_type_paragraph:
+        paragraph_html_node = paragraph_block_to_htmlnode(block)
+        return paragraph_html_node
+    if block_type == block_type_ordered_list:
+        ordered_list_html_node = ordered_block_to_htmlnode(block)
+        return ordered_list_html_node
+    if block_type == block_type_unordered_list:
+        unordered_list_html_node = unordered_block_to_htmlnode(block)
+        return unordered_list_html_node
+    raise ValueError("Invalid block type")
+        
 def block_to_block_type(block):
     lines = block.split("\n")
+
     if (
         block.startswith("# ")
         or block.startswith("## ")
@@ -65,64 +96,83 @@ def block_to_block_type(block):
         return block_type_ordered_list
     
     return block_type_paragraph
-            
-        
-            
-def heading_block_to_htmlnode(block,block_type):
-    if block_type == block_type_heading:
-        
-        if block.startswith("# "):
-            return HtmlNode("h1", block[2:])
 
-        if block.startswith("## "):
-            return HtmlNode("h2", block[3:])
-        
-        if block.startswith("### "):
-            return HtmlNode("h3", block[4:])
-        
-        if block.startswith("#### "):
-            return HtmlNode("h4", block[5:])
-        
-        if block.startswith("##### "):
-            return HtmlNode("h5", block[6:])
-        
-        if block.startswith("###### "):
-            return HtmlNode("h6", block[7:])
-        
-def code_block_to_htmlnode(block,block_type):
-    if block_type == block_type_code:
-        lines = block.split("\n")
-        join_list_lines = ("\n").join(lines[1:-1])
-        return HtmlNode("pre",None,[HtmlNode("code",join_list_lines)])
+def heading_block_to_htmlnode(block):
+    if block.startswith("# "):
+        text = block[2:]
+        children = inline_children_nodes(text)
+        return ParentNode("h1",children)
+    if block.startswith("## "):
+        text = block[3:]
+        children = inline_children_nodes(text)
+        return ParentNode("h2",children)
+    if block.startswith("### "):
+        text = block[4:]
+        children = inline_children_nodes(text)
+        return ParentNode("h3",children)
+    if block.startswith("#### "):
+        text = block[5:]
+        children = inline_children_nodes(text)
+        return ParentNode("h4",children)
+    if block.startswith("##### "):
+        text = block[6:]
+        children = inline_children_nodes(text)
+        return ParentNode("h5",children)
+    if block.startswith("###### "):
+        text = block[7:]
+        children = inline_children_nodes(text)
+        return ParentNode("h6",children)
+    else:
+        raise ValueError("Invalid heading")
+
+def code_block_to_htmlnode(block):
+    if not block.startswith("```") or not block.endswith("```"):
+        raise ValueError("Invalid code block")
+    text = block[4:-3]
+    children = inline_children_nodes(text)
+    code = ParentNode("code",children)
+    return ParentNode("pre",[code])
+
+def quote_block_to_htmlnode(block):
+    lines = block.split("\n")
+    updated_line = []
+    for line in lines:
+        if not line.startswith(">"):
+            raise ValueError("Invalid quote block")
+        updated_line.append(line.lstrip(">").strip())
+    text = (" ").join(updated_line)
+    children = inline_children_nodes(text)
+    return ParentNode("blockquote",children)
+
+def paragraph_block_to_htmlnode(block):
+    lines = block.split("\n")
+    paragraph = " ".join(lines)
+    children = inline_children_nodes(paragraph)
+    return ParentNode("p", block)
     
-def quote_block_to_htmlnode(block,block_type):
-    if block_type == block_type_quote:
-        lines = block.split("\n")
-        updated_line = []
-        for line in lines:
-            updated_line.append((line[1:]))
-        join_list_lines = ("\n").join(updated_line)
-        return HtmlNode("blockquote", join_list_lines)
-    
-def paragraph_block_to_htmlnode(block,block_type):
-    if block_type == block_type_paragraph:
-        return HtmlNode("p", block)
-    
-def unordered_block_to_htmlnode(block,block_type):
-    if block_type == block_type_unordered_list:
-        lines = block.split("\n")
-        li_nodes = []
-        for line in lines:
-            li_nodes.append(HtmlNode("li",(line[2:])))
-    return HtmlNode("ul",None,li_nodes)
+def unordered_block_to_htmlnode(block):
+    lines = block.split("\n")
+    li_nodes = []
+    for line in lines:
+        text = line[2:]
+        children = inline_children_nodes(text)
+        li_nodes.append(ParentNode("li",children))
+    return ParentNode("ul",li_nodes)
 
-def ordered_block_to_htmlnode(block,block_type):
-    if block_type == block_type_ordered_list:
-        lines = block.split("\n")
-        li_nodes = []
-        for line in lines:
-            li_nodes.append(HtmlNode("li",(line[3:])))
-    return HtmlNode("ol",li_nodes)
+def ordered_block_to_htmlnode(block):
+    lines = block.split("\n")
+    li_nodes = []
+    for line in lines:
+        text = line[3:]
+        children = inline_children_nodes(text)
+        li_nodes.append(ParentNode("li",children))
+    return ParentNode("ol",li_nodes)
 
-
+def inline_children_nodes(text):
+    text_nodes = text_to_textnodes(text)
+    inline_children_nodes = []
+    for text_node in text_nodes:
+        html_node = text_node_to_html_node(text_node)
+        inline_children_nodes.append(html_node)
+    return inline_children_nodes
     
