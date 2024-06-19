@@ -1,3 +1,5 @@
+from htmlnode import HtmlNode
+
 block_type_paragraph = "paragraph"
 block_type_heading = "heading"
 block_type_code = "code"
@@ -66,4 +68,61 @@ def block_to_block_type(block):
             
         
             
-         
+def heading_block_to_htmlnode(block,block_type):
+    if block_type == block_type_heading:
+        
+        if block.startswith("# "):
+            return HtmlNode("h1", block[2:])
+
+        if block.startswith("## "):
+            return HtmlNode("h2", block[3:])
+        
+        if block.startswith("### "):
+            return HtmlNode("h3", block[4:])
+        
+        if block.startswith("#### "):
+            return HtmlNode("h4", block[5:])
+        
+        if block.startswith("##### "):
+            return HtmlNode("h5", block[6:])
+        
+        if block.startswith("###### "):
+            return HtmlNode("h6", block[7:])
+        
+def code_block_to_htmlnode(block,block_type):
+    if block_type == block_type_code:
+        lines = block.split("\n")
+        join_list_lines = ("\n").join(lines[1:-1])
+        return HtmlNode("pre",None,[HtmlNode("code",join_list_lines)])
+    
+def quote_block_to_htmlnode(block,block_type):
+    if block_type == block_type_quote:
+        lines = block.split("\n")
+        updated_line = []
+        for line in lines:
+            updated_line.append((line[1:]))
+        join_list_lines = ("\n").join(updated_line)
+        return HtmlNode("blockquote", join_list_lines)
+    
+def paragraph_block_to_htmlnode(block,block_type):
+    if block_type == block_type_paragraph:
+        return HtmlNode("p", block)
+    
+def unordered_block_to_htmlnode(block,block_type):
+    if block_type == block_type_unordered_list:
+        lines = block.split("\n")
+        li_nodes = []
+        for line in lines:
+            li_nodes.append(HtmlNode("li",(line[2:])))
+    return HtmlNode("ul",None,li_nodes)
+
+def ordered_block_to_htmlnode(block,block_type):
+    if block_type == block_type_ordered_list:
+        lines = block.split("\n")
+        li_nodes = []
+        for line in lines:
+            li_nodes.append(HtmlNode("li",(line[3:])))
+    return HtmlNode("ol",li_nodes)
+
+
+    

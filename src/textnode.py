@@ -12,15 +12,15 @@ class TextNode:
     def __repr__(self):
         return f"TextNode({self.text}, {self.text_type}, {self.url})"
         
-    def text_node_to_html(text_node):
+    def text_node_to_html_node(text_node):
         if text_node.text_type == "text":
-            return LeafNode(None,"swapnil gupta")
+            return LeafNode(None,text_node.text)
         elif text_node.text_type == "bold":
-            return LeafNode("b","sappo")
+            return LeafNode("b",text_node.text)
         elif text_node.text_type == "italic":
-            return LeafNode("i","anime")
+            return LeafNode("i",text_node.text)
         elif text_node.text_type == "code":
-            return LeafNode("code","boot.dev")
+            return LeafNode("code",text_node.text)
         elif text_node.text_type == "link":
             return LeafNode("a","my image",{"href": "www.boot.dev.com"})
         elif text_node.text_type == "image":
