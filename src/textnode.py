@@ -25,9 +25,9 @@ def text_node_to_html_node(text_node):
         return LeafNode("code",text_node.text)
     
     elif text_node.text_type == "link":
-        return LeafNode("a","my image",{"href": "www.boot.dev.com"})
+        return LeafNode("a",text_node.text,{"href": text_node.url })
     elif text_node.text_type == "image":
-        return LeafNode("img","",{"src": "image.png", "alt":"my image"})
+        return LeafNode("img",text_node.text,{"src": text_node.url},)
     else:
         raise ValueError(f"Invalid Text Type: {text_node.text_type}")    
 
