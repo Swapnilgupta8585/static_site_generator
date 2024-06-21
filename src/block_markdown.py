@@ -148,7 +148,7 @@ def paragraph_block_to_htmlnode(block):
     lines = block.split("\n")
     paragraph = " ".join(lines)
     children = inline_children_nodes(paragraph)
-    return ParentNode("p", block)
+    return ParentNode("p", children)
     
 def unordered_block_to_htmlnode(block):
     lines = block.split("\n")
