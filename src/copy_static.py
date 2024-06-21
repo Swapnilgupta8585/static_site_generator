@@ -9,11 +9,13 @@ def remove_public_dir_content(public_dir):
         try:
             shutil.rmtree(public_dir)
         except Exception as e:
-            print(f"Can't remove {public_dir}. Error:{e}")
+            print(f"Can't remove {public_dir}. Error:{e}")   
     # Recreate the directory
         try:
             os.mkdir(public_dir)
-            print(f"All contents of {public_dir} have been deleted, and the directory has been recreated.")  
+            print("=========================================================================")
+            print(f"All contents of {public_dir} have been deleted, and the directory has been recreated.") 
+            print("=========================================================================")  
         except Exception as e:
             print(f"Can't recreate {public_dir}. Error:{e}")
     else:
@@ -30,10 +32,14 @@ def copy_static(file_path, public_dir):
             
             # If it's a file, copy it to the destination directory
             if os.path.isfile(item_path):
+                print("=========================================================================")
                 print(f"Copying file: {item_path} to {destination_path}")
+                print("=========================================================================") 
                 try:
                     shutil.copy(item_path, destination_path)
+                    print("=========================================================================") 
                     print(f"File copied successfully")
+                    print("=========================================================================") 
                 except Exception as e:
                     print(f"Failed to copy {item_path}. Error: {e}")
             
