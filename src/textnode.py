@@ -15,6 +15,7 @@ class TextNode:
         return f"TextNode({self.text}, {self.text_type}, {self.url})"
         
 def text_node_to_html_node(text_node):
+    #change text_node to html_node
     if text_node.text_type == "text":
         return LeafNode(None,text_node.text)
     elif text_node.text_type == "bold":

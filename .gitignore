@@ -1,2 +1,3 @@
+# ignore __pycache__ and also ignore the output of the program
 __pycache__/
 public/
